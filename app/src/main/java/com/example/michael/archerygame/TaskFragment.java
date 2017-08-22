@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -243,12 +244,14 @@ public class TaskFragment extends Fragment {
     }
 
     public String getNextPlayerTeamA() {
-        if (++playerTurnCounterOfTeamA > playerListOfTeamA.size()) playerTurnCounterOfTeamA = 0;
+        if (++playerTurnCounterOfTeamA == playerListOfTeamA.size()) playerTurnCounterOfTeamA = 0;
+        Log.v("playerName", playerListOfTeamA.get(playerTurnCounterOfTeamA));
         return playerListOfTeamA.get(playerTurnCounterOfTeamA);
     }
 
     public String getNextPlayerTeamB() {
-        if (++playerTurnCounterOfTeamB > playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
+        if (++playerTurnCounterOfTeamB == playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
+        Log.v("playerName", playerListOfTeamB.get(playerTurnCounterOfTeamB));
         return playerListOfTeamB.get(playerTurnCounterOfTeamB);
     }
 }
