@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="?attr/actionBarSize"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/teamANameView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Team A"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textColor="@android:color/black"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/scoreOfTeamA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="36sp"
+                android:textColor="@android:color/black"/>
+
+            <Button
+                android:id="@+id/addPointsForTeamA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+ Punkte"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/decPointsForTeamA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="- Punkte"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/colorPrimary"/>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="fill_parent"
+            android:background="@android:color/darker_gray" />
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/teamBNameView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Team B"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textColor="@android:color/black"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"/>
+
+            <TextView
+                android:id="@+id/scoreOfTeamB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textSize="36sp"
+                android:textColor="@android:color/black"/>
+
+            <Button
+                android:id="@+id/addPointsForTeamB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="+ Punkte"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/colorPrimary"/>
+
+            <Button
+                android:id="@+id/decPointsForTeamB"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="- Punkte"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:backgroundTint="@color/colorPrimary"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/setTaskButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="Aufgabe erhalten" />
+
+    <TextView
+        android:id="@+id/taskTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:textColor="@android:color/black"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"/>
+
+    <ImageView
+        android:id="@+id/taskImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

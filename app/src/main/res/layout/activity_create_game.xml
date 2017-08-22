@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="16dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/createGameTeamView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Erstes Team"
+            android:textSize="24sp"
+            android:textColor="@android:color/black" />
+
+
+        <EditText
+            android:id="@+id/teamName"
+            android:layout_width="match_parent"
+            android:hint="Teamname"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/playerEditText"
+                android:hint="Spieler"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/gameCreationAddButton"
+                android:layout_marginLeft="16dp"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:onClick="addPlayerToTeamA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:layout_weight="0"
+                android:text="hinzufügen"
+                android:backgroundTint="@color/colorPrimary"/>
+
+        </LinearLayout>
+
+
+        <ListView
+            android:layout_weight="1"
+            android:id="@+id/playerListView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+        </ListView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="zurück"
+            android:backgroundTint="@color/colorPrimary" />
+
+        <Button
+            android:id="@+id/nextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="weiter"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+</LinearLayout>

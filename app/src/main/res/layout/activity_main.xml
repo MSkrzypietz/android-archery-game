@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menubm">
+
+    <Button
+        android:id="@+id/newGameButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Neues Spiel"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"
+        android:backgroundTint="@color/colorPrimary"/>
+
+    <Button
+        android:id="@+id/loadGameButton"
+        android:layout_width="match_parent"
+        android:textColor="@android:color/white"
+        android:layout_height="wrap_content"
+        android:text="Spiel laden"
+        android:layout_marginLeft="64dp"
+        android:layout_marginRight="64dp"
+        android:backgroundTint="@color/colorPrimary"/>
+
+</LinearLayout>
