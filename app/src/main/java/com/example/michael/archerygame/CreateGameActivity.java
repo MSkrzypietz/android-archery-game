@@ -82,7 +82,7 @@ public class CreateGameActivity extends AppCompatActivity {
 
     private void changeHeader() {
         TextView header = (TextView) findViewById(R.id.createGameTeamView);
-        header.setText("Zweites Team");
+        header.setText(R.string.secondTeam);
 
         EditText addPlayer = (EditText) findViewById(R.id.playerEditText);
         addPlayer.setText("");
@@ -101,6 +101,7 @@ public class CreateGameActivity extends AppCompatActivity {
 
     private void setTeamName() {
         teamName = teamNameEditText.getText().toString().trim();
+        if (teamName.length() == 0) teamName = hasToCreateAnotherTeam ? "Team A" : "Team B";
     }
 
     private void insertGame() {
@@ -135,12 +136,8 @@ public class CreateGameActivity extends AppCompatActivity {
         String selection = GameEntry.COLUMN_GAME_DATE + "=?";
         String[] selectionArgs = new String[] {getGameDate()};
 
-        Cursor cursor = getContentResolver().query(GameEntry.CONTENT_URI, projection, selection, selectionArgs, GameEntry.COLUMN_GAME_DATE_NR + " DESC");
-
-        try {
-            if (cursor.moveToNext()) return cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_NR)) + 1;
-        } finally {
-            cursor.close();
+        try (Cursor cursor = getContentResolver().query(GameEntry.CONTENT_URI, projection, selection, selectionArgs, GameEntry.COLUMN_GAME_DATE_NR + " DESC")){
+            if (cursor != null && cursor.moveToNext()) return cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_GAME_DATE_NR)) + 1;
         }
         return 1;
     }

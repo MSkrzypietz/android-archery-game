@@ -51,7 +51,6 @@ class DbHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // The database is still at version 1, so there's nothing to do be done here.
         db.execSQL("DROP TABLE IF EXISTS " + PlayerEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + GameEntry.TABLE_NAME);
         onCreate(db);
