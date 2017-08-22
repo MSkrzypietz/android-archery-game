@@ -111,7 +111,7 @@ public class TaskFragment extends Fragment {
 
     private void setTeamNames() {
 
-        try(Cursor cursor = GameActivity.getGameContext().getContentResolver().query(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), null, null, null, null)) {
+        try (Cursor cursor = GameActivity.getGameContext().getContentResolver().query(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), null, null, null, null)) {
             if (cursor != null && cursor.moveToNext()) {
                 nameOfTeamA = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_A));
                 nameOfTeamB = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_B));
@@ -129,24 +129,20 @@ public class TaskFragment extends Fragment {
                 PlayerEntry.COLUMN_PLAYER_NAME,
                 PlayerEntry.COLUMN_PLAYER_POINTS
         };
-        //String selection = PlayerEntry.COLUMN_GAME_ID + " = ? AND " + PlayerEntry.COLUMN_PLAYER_TEAM + " = ?";
-        String selection = PlayerEntry.COLUMN_PLAYER_TEAM + " = ?";
-        //String selectionArgs[] = { String.valueOf(gameId), String.valueOf(teamValue) };
-        String selectionArgs[] = { String.valueOf(teamValue) };
-        //Cursor cursor = GameActivity.getGameContext().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, null, null, PlayerEntry._ID);
 
-        try(Cursor cursor = GameActivity.getGameContext().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, selection, selectionArgs, PlayerEntry._ID)) {
+        String selection = PlayerEntry.COLUMN_PLAYER_TEAM + " = ?";
+        String selectionArgs[] = { String.valueOf(teamValue) };
+
+        try (Cursor cursor = GameActivity.getGameContext().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, selection, selectionArgs, PlayerEntry._ID)) {
             if (teamValue == PlayerEntry.TEAM_A) {
                 while (cursor != null && cursor.moveToNext()) {
-                    playerListOfTeamA.add(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)) + " " +
-                    cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_GAME_ID)));
+                    playerListOfTeamA.add(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)));
                     playerPointsOfTeamA.add(cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS)));
                 }
                 return;
             }
             while (cursor != null && cursor.moveToNext()) {
-                playerListOfTeamB.add(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)) + " " +
-                        cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_GAME_ID)));
+                playerListOfTeamB.add(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)));
                 playerPointsOfTeamB.add(cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS)));
             }
         }
@@ -245,13 +241,11 @@ public class TaskFragment extends Fragment {
 
     public String getNextPlayerTeamA() {
         if (++playerTurnCounterOfTeamA == playerListOfTeamA.size()) playerTurnCounterOfTeamA = 0;
-        Log.v("playerName", playerListOfTeamA.get(playerTurnCounterOfTeamA));
         return playerListOfTeamA.get(playerTurnCounterOfTeamA);
     }
 
     public String getNextPlayerTeamB() {
         if (++playerTurnCounterOfTeamB == playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
-        Log.v("playerName", playerListOfTeamB.get(playerTurnCounterOfTeamB));
         return playerListOfTeamB.get(playerTurnCounterOfTeamB);
     }
 }
