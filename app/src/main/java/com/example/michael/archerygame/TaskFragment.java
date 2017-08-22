@@ -130,8 +130,8 @@ public class TaskFragment extends Fragment {
                 PlayerEntry.COLUMN_PLAYER_POINTS
         };
 
-        String selection = PlayerEntry.COLUMN_PLAYER_TEAM + " = ?";
-        String selectionArgs[] = { String.valueOf(teamValue) };
+        String selection = PlayerEntry.COLUMN_PLAYER_TEAM + " = ? AND " + PlayerEntry.COLUMN_GAME_ID + " = ?";
+        String selectionArgs[] = { String.valueOf(teamValue), String.valueOf(gameId) };
 
         try (Cursor cursor = GameActivity.getGameContext().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, selection, selectionArgs, PlayerEntry._ID)) {
             if (teamValue == PlayerEntry.TEAM_A) {
