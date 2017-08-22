@@ -6,11 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
 import com.example.michael.archerygame.data.GameContract.GameEntry;
 
-/**
- * Created by Michael on 09.08.2017.
- */
-
-public class DbHelper extends SQLiteOpenHelper {
+class DbHelper extends SQLiteOpenHelper {
 
     public static final String LOG_TAG = DbHelper.class.getSimpleName();
 
@@ -20,9 +16,9 @@ public class DbHelper extends SQLiteOpenHelper {
     /**
      * Database version. If you change the database schema, you must increment the database version.
      */
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
-    public DbHelper(Context context) {
+    DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -42,8 +38,8 @@ public class DbHelper extends SQLiteOpenHelper {
 
         String SQL_CREATE_GAMES_TABLE = "CREATE TABLE " + GameEntry.TABLE_NAME + " ("
                 + GameEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + GameEntry.COLUMN_GAME_NAME_TEAM_A + " TEXT NOT NULL DEFAULT \"Team A\", "
-                + GameEntry.COLUMN_GAME_NAME_TEAM_B + " TEXT NOT NULL DEFAULT \"Team B\", "
+                + GameEntry.COLUMN_GAME_NAME_TEAM_A + " DEFAULT \"Team A\", "
+                + GameEntry.COLUMN_GAME_NAME_TEAM_B + " DEFAULT \"Team B\", "
                 + GameEntry.COLUMN_GAME_DATE + " TEXT NOT NULL, "
                 + GameEntry.COLUMN_GAME_DATE_NR + " INTEGER NOT NULL DEFAULT 1);";
 
@@ -56,8 +52,8 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // The database is still at version 1, so there's nothing to do be done here.
-        db.execSQL("DROP TABLE IF EXISTS" + PlayerEntry.TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS" + GameEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + PlayerEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + GameEntry.TABLE_NAME);
         onCreate(db);
     }
 }

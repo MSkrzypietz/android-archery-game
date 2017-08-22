@@ -3,4 +3,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="task_blind">kurze Scheibe: 3 Versuche</string>
+    <string name="task_ratte">Ratte treffen: 2 Versuche</string>
+    <string name="task_duell">lange Scheibe: 2 Versuche</string>
+    <string name="task_wasserballon">Mit Ansage: 2 Versuche</string>
+    <string name="task_gold">lange Scheibe: 2 Versuche</string>
 </resources>
