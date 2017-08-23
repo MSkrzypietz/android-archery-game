@@ -4,9 +4,11 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -155,5 +157,21 @@ public class CreateGameActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+/*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                deleteGame();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    } */
+
+    private void deleteGame() {
+        String where = GameEntry._ID + " = ?";
+        String[] selectionArgs = new String[] {String.valueOf(gameId)};
+        getContentResolver().delete(GameEntry.CONTENT_URI, where, selectionArgs);
     }
 }

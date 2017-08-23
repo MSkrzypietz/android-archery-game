@@ -166,13 +166,11 @@ public class DbProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case GAMES:
-                // Delete all rows that match the selection and selection args
                 return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
-            /*case PET_ID:
-                // Delete a single row given by the ID in the URI
-                selection = PetContract.PetEntry._ID + "=?";
+            /*case GAME_ID:
+                selection = GameEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(PetContract.PetEntry.TABLE_NAME, selection, selectionArgs);*/
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);*/
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
@@ -184,10 +182,6 @@ public class DbProvider extends ContentProvider {
         switch (match) {
             case GAMES:
                 return GameEntry.CONTENT_LIST_TYPE;
-            /*
-            case PET_ID:
-                return PetContract.PetEntry.CONTENT_ITEM_TYPE;
-                */
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
