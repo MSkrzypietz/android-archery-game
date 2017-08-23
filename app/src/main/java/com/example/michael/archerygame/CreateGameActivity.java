@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.michael.archerygame.data.GameContract.GameEntry;
 import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
@@ -21,12 +22,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import static com.example.michael.archerygame.R.id.teamName;
 
 public class CreateGameActivity extends AppCompatActivity {
-
-    //TODO: Refactor to insert data only when finished with both teams
 
     private long gameId;
     private String nameOfTeamA;
@@ -36,7 +36,8 @@ public class CreateGameActivity extends AppCompatActivity {
     private ArrayList<String> membersOfTeamB = new ArrayList<>();
     private ArrayAdapter<String> itemsAdapter;
     public boolean hasToCreateAnotherTeam = true;
-    EditText teamNameEditText;
+    private EditText teamNameEditText;
+    private ListView playerListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +54,6 @@ public class CreateGameActivity extends AppCompatActivity {
                 else membersOfTeamB.add(playerName);
                 itemsAdapter.notifyDataSetChanged();
                 playerNameEditText.setText("");
-                /*
-                // TODO: rename func to createPlayerTableEntries AND create all entries together in the end
-                int teamValue = hasToCreateAnotherTeam ? PlayerEntry.TEAM_A : PlayerEntry.TEAM_B;
-                createPlayerTableEntry(teamValue);
-                */
             }
         });
 
@@ -66,15 +62,14 @@ public class CreateGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setTeamName();
-                // TODO: no need of updateGame anymore, simply use insertGame with the global vars nameOfTeamA/B
                 if (hasToCreateAnotherTeam) {
                     changeHeader();
-                    updateGame(GameEntry.COLUMN_GAME_NAME_TEAM_A);
                     hasToCreateAnotherTeam = false;
                     resetActivityToCreateAnotherTeam();
                 } else {
                     insertGame();
-                    updateGame(GameEntry.COLUMN_GAME_NAME_TEAM_B);
+                    createPlayerTableEntries(PlayerEntry.TEAM_A);
+                    createPlayerTableEntries(PlayerEntry.TEAM_B);
                     Intent gameIntent = new Intent(CreateGameActivity.this, GameActivity.class);
                     gameIntent.putExtra("GAME_ID", gameId);
                     startActivity(gameIntent);
@@ -82,11 +77,10 @@ public class CreateGameActivity extends AppCompatActivity {
             }
         });
 
-        if (hasToCreateAnotherTeam) itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, membersOfTeamA);
-        else itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, membersOfTeamA);
+        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, membersOfTeamA);
 
-        ListView listView = (ListView) findViewById(R.id.playerListView);
-        listView.setAdapter(itemsAdapter);
+        playerListView = (ListView) findViewById(R.id.playerListView);
+        setItemAdapter();
 
         teamNameEditText = (EditText) findViewById(teamName);
     }
@@ -99,15 +93,21 @@ public class CreateGameActivity extends AppCompatActivity {
         addPlayer.setText("");
     }
 
-    private void createPlayerTableEntry(int teamValue) {
-        ContentValues values = new ContentValues();
-        values.put(PlayerEntry.COLUMN_PLAYER_NAME, playerName);
-        values.put(PlayerEntry.COLUMN_PLAYER_TEAM, teamValue);
-        values.put(PlayerEntry.COLUMN_GAME_ID, gameId);
+    private void createPlayerTableEntries(int teamValue) {
+        ArrayList<String> playerList;
+        if (teamValue == PlayerEntry.TEAM_A) playerList = membersOfTeamA;
+        else playerList = membersOfTeamB;
 
-        long playerId = ContentUris.parseId(getContentResolver().insert(PlayerEntry.CONTENT_URI, values));
+        for (String player : playerList) {
+            ContentValues values = new ContentValues();
+            values.put(PlayerEntry.COLUMN_PLAYER_NAME, player);
+            values.put(PlayerEntry.COLUMN_PLAYER_TEAM, teamValue);
+            values.put(PlayerEntry.COLUMN_GAME_ID, gameId);
 
-        Log.v("CreateGameActivity", "New row ID = " + playerId);
+            long playerId = ContentUris.parseId(getContentResolver().insert(PlayerEntry.CONTENT_URI, values));
+
+            Log.v("CreateGameActivity", "New row ID = " + playerId);
+        }
     }
 
     private void setTeamName() {
@@ -139,14 +139,8 @@ public class CreateGameActivity extends AppCompatActivity {
         Log.v("CreateGameActivity", "New row ID = " + gameId);
     }
 
-    private void updateGame(String team) {
-        ContentValues values = new ContentValues();
-        values.put(team, teamName);
-        getContentResolver().update(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), values, null, null);
-    }
-
     private String getGameDate() {
-        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy", Locale.GERMANY);
         Date date = new Date();
         return df.format(date);
     }
@@ -159,7 +153,7 @@ public class CreateGameActivity extends AppCompatActivity {
                 GameEntry.COLUMN_GAME_DATE_NR
         };
 
-        String selection = GameEntry.COLUMN_GAME_DATE + "=?";
+        String selection = GameEntry.COLUMN_GAME_DATE + " = ?";
         String[] selectionArgs = new String[] {getGameDate()};
 
         try (Cursor cursor = getContentResolver().query(GameEntry.CONTENT_URI, projection, selection, selectionArgs, GameEntry.COLUMN_GAME_DATE_NR + " DESC")){
@@ -169,10 +163,12 @@ public class CreateGameActivity extends AppCompatActivity {
     }
 
     private void resetActivityToCreateAnotherTeam() {
-        //TODO: fix commented line
         teamNameEditText.setText("");
-        //membersOfTeam.clear();
-        itemsAdapter.notifyDataSetChanged();
+        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, membersOfTeamB);
+        setItemAdapter();
     }
 
+    private void setItemAdapter() {
+        playerListView.setAdapter(itemsAdapter);
+    }
 }
