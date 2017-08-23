@@ -38,8 +38,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(loadGameIntent);
             }
         });
-
-        //getApplicationContext().deleteDatabase("game.db");
     }
 
 }

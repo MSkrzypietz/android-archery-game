@@ -105,12 +105,10 @@ public class CreateGameActivity extends AppCompatActivity {
     }
 
     private void insertGame() {
-        String teamNameString = teamName;
         String gameDateString = getGameDate();
         String gameDateNrString = String.valueOf(getGameDateNr());
 
         ContentValues values = new ContentValues();
-        values.put(GameEntry.COLUMN_GAME_NAME_TEAM_A, teamNameString);
         values.put(GameEntry.COLUMN_GAME_DATE, gameDateString);
         values.put(GameEntry.COLUMN_GAME_DATE_NR, gameDateNrString);
 
@@ -152,5 +150,10 @@ public class CreateGameActivity extends AppCompatActivity {
         teamNameEditText.setText("");
         membersOfTeam.clear();
         itemsAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
