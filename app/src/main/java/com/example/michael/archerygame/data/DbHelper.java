@@ -9,7 +9,7 @@ import com.example.michael.archerygame.data.GameContract.GameEntry;
 class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "game.db";
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 5;
 
     DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -32,6 +32,7 @@ class DbHelper extends SQLiteOpenHelper {
                 + GameEntry.COLUMN_GAME_NAME_TEAM_B + " TEXT DEFAULT \"Team B\", "
                 + GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_A + " INTEGER DEFAULT 0, "
                 + GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_B + " INTEGER DEFAULT 0, "
+                + GameEntry.COLUMN_GAME_TEAM_TURN + " INTEGER DEFAULT 0, "
                 + GameEntry.COLUMN_GAME_DATE + " TEXT NOT NULL, "
                 + GameEntry.COLUMN_GAME_DATE_NR + " INTEGER NOT NULL DEFAULT 1);";
 

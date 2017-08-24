@@ -27,8 +27,11 @@ public class GameContract {
         public final static String COLUMN_GAME_NAME_TEAM_B = "gameNameTeamB";
         public final static String COLUMN_GAME_TURN_COUNTER_TEAM_A = "turnCounterTeamA";
         public final static String COLUMN_GAME_TURN_COUNTER_TEAM_B = "turnCounterTeamB";
+        public final static String COLUMN_GAME_TEAM_TURN = "teamTurn";
         public final static String COLUMN_GAME_DATE = "gameDate";
         public final static String COLUMN_GAME_DATE_NR = "gameDateNr";
 
+        public static final int TEAM_A = 0;
+        public static final int TEAM_B = 1;
     }
 }

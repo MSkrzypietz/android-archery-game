@@ -31,9 +31,7 @@ public class TaskFragment extends Fragment {
     private int currentTask;
     private Player currentPlayer;
     private View rootView;
-    private boolean isTeamATurn = true;
-
-    //TODO: playerTurnCounter has to be saved in the db as well
+    private int teamTurn = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,7 +42,7 @@ public class TaskFragment extends Fragment {
         initLists();
         gameId = GameActivity.gameId;
         if (gameId != -1) {
-            setTeamNames();
+            initGameDetails();
             updateTeamNameViews();
         }
 
@@ -99,25 +97,25 @@ public class TaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setTaskImage();
-                if (isTeamATurn) {
+                if (teamTurn == GameEntry.TEAM_A) {
                     addPointsForTeamA.setEnabled(true);
                     addPointsForTeamB.setEnabled(false);
-                }
-                else {
-                    addPointsForTeamA.setEnabled(false);
-                    addPointsForTeamB.setEnabled(true);
-                }
-                decPointsForTeamA.setEnabled(false);
-                decPointsForTeamB.setEnabled(false);
-                if (isTeamATurn) {
+
                     currentPlayer = getNextPlayerTeamA();
                     Toast.makeText(getActivity(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    addPointsForTeamA.setEnabled(false);
+                    addPointsForTeamB.setEnabled(true);
+
                     currentPlayer = getNextPlayerTeamB();
                     Toast.makeText(getActivity(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
                 }
-                isTeamATurn = !isTeamATurn;
+                decPointsForTeamA.setEnabled(false);
+                decPointsForTeamB.setEnabled(false);
+
+                teamTurn = teamTurn == GameEntry.TEAM_A ? GameEntry.TEAM_B : GameEntry.TEAM_A;
+                updateTurnCounters();
             }
         });
 
@@ -134,12 +132,15 @@ public class TaskFragment extends Fragment {
         playerListOfTeamA.clear();
     }
 
-    private void setTeamNames() {
+    private void initGameDetails() {
 
         try (Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), null, null, null, null)) {
             if (cursor != null && cursor.moveToNext()) {
                 nameOfTeamA = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_A));
                 nameOfTeamB = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_B));
+                playerTurnCounterOfTeamA = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_A));
+                playerTurnCounterOfTeamB = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_B));
+                teamTurn = cursor.getInt(cursor.getColumnIndex(GameEntry.COLUMN_GAME_TEAM_TURN));
                 return;
             }
         }
@@ -326,5 +327,14 @@ public class TaskFragment extends Fragment {
 
     public static ArrayList<Player> getPlayerListOfTeamB() {
         return new ArrayList<>(playerListOfTeamB);
+    }
+
+    private void updateTurnCounters() {
+        ContentValues values = new ContentValues();
+        values.put(GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_A, playerTurnCounterOfTeamA);
+        values.put(GameEntry.COLUMN_GAME_TURN_COUNTER_TEAM_B, playerTurnCounterOfTeamB);
+        values.put(GameEntry.COLUMN_GAME_TEAM_TURN,
+                teamTurn == GameEntry.TEAM_A ? GameEntry.TEAM_A : GameEntry.TEAM_B);
+        getActivity().getContentResolver().update(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), values, null, null);
     }
 }
