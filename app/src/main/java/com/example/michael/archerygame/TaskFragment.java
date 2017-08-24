@@ -47,43 +47,58 @@ public class TaskFragment extends Fragment {
         }
 
         final Button addPointsForTeamA = (Button) rootView.findViewById(R.id.addPointsForTeamA);
+        final Button addPointsForTeamB = (Button) rootView.findViewById(R.id.addPointsForTeamB);
+        final Button decPointsForTeamA = (Button) rootView.findViewById(R.id.decPointsForTeamA);
+        final Button decPointsForTeamB = (Button) rootView.findViewById(R.id.decPointsForTeamB);
+
+        decPointsForTeamA.setEnabled(false);
+        decPointsForTeamB.setEnabled(false);
+
         addPointsForTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addPointsForTeamA();
+                addPointsForTeamA.setEnabled(false);
+                decPointsForTeamA.setEnabled(true);
             }
         });
 
-        final Button decPointsForTeamA = (Button) rootView.findViewById(R.id.decPointsForTeamA);
         decPointsForTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 decPointsForTeamA();
+                addPointsForTeamA.setEnabled(true);
+                decPointsForTeamA.setEnabled(false);
             }
         });
 
-        final Button addPointsForTeamB = (Button) rootView.findViewById(R.id.addPointsForTeamB);
         addPointsForTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addPointsForTeamB();
+                addPointsForTeamB.setEnabled(false);
+                decPointsForTeamB.setEnabled(true);
             }
         });
 
-        final Button decPointsForTeamB = (Button) rootView.findViewById(R.id.decPointsForTeamB);
         decPointsForTeamB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 decPointsForTeamB();
+                addPointsForTeamB.setEnabled(true);
+                decPointsForTeamB.setEnabled(false);
             }
         });
-
 
         final Button setTask = (Button) rootView.findViewById(R.id.setTaskButton);
         setTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setTaskImage();
+                addPointsForTeamA.setEnabled(true);
+                addPointsForTeamB.setEnabled(true);
+                decPointsForTeamA.setEnabled(false);
+                decPointsForTeamB.setEnabled(false);
                 if (isTeamATurn) Toast.makeText(GameActivity.getGameContext(), getNextPlayerTeamA(), Toast.LENGTH_SHORT).show();
                 else Toast.makeText(GameActivity.getGameContext(), getNextPlayerTeamB(), Toast.LENGTH_SHORT).show();
                 isTeamATurn = !isTeamATurn;
