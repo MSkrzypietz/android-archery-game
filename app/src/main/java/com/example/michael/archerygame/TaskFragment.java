@@ -5,11 +5,9 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,11 +27,6 @@ public class TaskFragment extends Fragment {
     private long gameId;
     public static ArrayList<Player> playerListOfTeamA = new ArrayList<>();
     public static ArrayList<Player> playerListOfTeamB = new ArrayList<>();
-    /*
-    public static ArrayList<String> playerListOfTeamA = new ArrayList<>();
-    public static ArrayList<String> playerListOfTeamB = new ArrayList<>();
-    public static ArrayList<Integer> playerPointsOfTeamA = new ArrayList<>();
-    public static ArrayList<Integer> playerPointsOfTeamB = new ArrayList<>(); */
     private int playerTurnCounterOfTeamA = 0;
     private int playerTurnCounterOfTeamB = 0;
     private int currentTask;
@@ -124,6 +117,7 @@ public class TaskFragment extends Fragment {
 
     private void initListTeam(int teamValue) {
         String[] projection = {
+                PlayerEntry._ID,
                 PlayerEntry.COLUMN_GAME_ID,
                 PlayerEntry.COLUMN_PLAYER_NAME,
                 PlayerEntry.COLUMN_PLAYER_POINTS
@@ -136,13 +130,17 @@ public class TaskFragment extends Fragment {
             if (teamValue == PlayerEntry.TEAM_A) {
 
                 while (cursor != null && cursor.moveToNext()) {
-                    playerListOfTeamA.add(new Player(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
+                    playerListOfTeamA.add(new Player(
+                            cursor.getLong(cursor.getColumnIndex(PlayerEntry._ID)),
+                            cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
                             cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS))));
                 }
                 return;
             }
             while (cursor != null && cursor.moveToNext()) {
-                playerListOfTeamB.add(new Player(cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
+                playerListOfTeamB.add(new Player(
+                        cursor.getLong(cursor.getColumnIndex(PlayerEntry._ID)),
+                        cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
                         cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS))));
             }
         }
@@ -158,26 +156,26 @@ public class TaskFragment extends Fragment {
 
     private void addPointsForTeamA() {
         TextView teamAScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamA);
-        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) + currentPointsOfTask();
+        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) + getCurrentPointsOfTask();
         teamAScoreView.setText(String.valueOf(newScore));
     }
 
     private void decPointsForTeamA() {
         TextView teamAScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamA);
-        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) - currentPointsOfTask();
-        if (Integer.parseInt(teamAScoreView.getText().toString()) >= currentPointsOfTask()) teamAScoreView.setText(String.valueOf(newScore));
+        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) - getCurrentPointsOfTask();
+        if (Integer.parseInt(teamAScoreView.getText().toString()) >= getCurrentPointsOfTask()) teamAScoreView.setText(String.valueOf(newScore));
     }
 
     private void addPointsForTeamB() {
         TextView teamBScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamB);
-        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) + currentPointsOfTask();
+        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) + getCurrentPointsOfTask();
         teamBScoreView.setText(String.valueOf(newScore));
     }
 
     private void decPointsForTeamB() {
         TextView teamBScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamB);
-        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) - currentPointsOfTask();
-        if (Integer.parseInt(teamBScoreView.getText().toString()) >= currentPointsOfTask()) teamBScoreView.setText(String.valueOf(newScore));
+        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) - getCurrentPointsOfTask();
+        if (Integer.parseInt(teamBScoreView.getText().toString()) >= getCurrentPointsOfTask()) teamBScoreView.setText(String.valueOf(newScore));
     }
 
     private void updatePointsForTeamA(int playerPoints) {
@@ -186,7 +184,7 @@ public class TaskFragment extends Fragment {
         GameActivity.getGameContext().getContentResolver().update(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), values, null, null);
     }
 
-    private int currentPointsOfTask() {
+    private int getCurrentPointsOfTask() {
         switch(currentTask) {
             case 1:
                 return 3;

@@ -2,16 +2,19 @@ package com.example.michael.archerygame;
 
 public class Player {
 
+    private long playerId;
     private String name = "";
     private int score = 0;
 
-    public Player(String name, int score) {
+    public Player(long playerId, String name, int score) {
+        this.playerId = playerId;
         if (name != null) this.name = name;
         this.score = score;
     }
 
     public String getName() {
-        return name;
+        if (name != null) return name;
+        return "name not set.";
     }
 
     public void setName(String name) {
