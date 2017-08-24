@@ -18,7 +18,6 @@ import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
 
 import java.util.ArrayList;
 
-@SuppressWarnings("ConstantConditions")
 public class TaskFragment extends Fragment {
 
     public static String nameOfTeamA;
@@ -112,11 +111,11 @@ public class TaskFragment extends Fragment {
                 decPointsForTeamB.setEnabled(false);
                 if (isTeamATurn) {
                     currentPlayer = getNextPlayerTeamA();
-                    Toast.makeText(GameActivity.getGameContext(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
                 }
                 else {
                     currentPlayer = getNextPlayerTeamB();
-                    Toast.makeText(GameActivity.getGameContext(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
                 }
                 isTeamATurn = !isTeamATurn;
             }
@@ -137,7 +136,7 @@ public class TaskFragment extends Fragment {
 
     private void setTeamNames() {
 
-        try (Cursor cursor = GameActivity.getGameContext().getContentResolver().query(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), null, null, null, null)) {
+        try (Cursor cursor = getActivity().getContentResolver().query(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), null, null, null, null)) {
             if (cursor != null && cursor.moveToNext()) {
                 nameOfTeamA = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_A));
                 nameOfTeamB = cursor.getString(cursor.getColumnIndex(GameEntry.COLUMN_GAME_NAME_TEAM_B));
@@ -160,7 +159,7 @@ public class TaskFragment extends Fragment {
         String selection = PlayerEntry.COLUMN_PLAYER_TEAM + " = ? AND " + PlayerEntry.COLUMN_GAME_ID + " = ?";
         String selectionArgs[] = { String.valueOf(teamValue), String.valueOf(gameId) };
 
-        try (Cursor cursor = GameActivity.getGameContext().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, selection, selectionArgs, PlayerEntry._ID)) {
+        try (Cursor cursor = getActivity().getContentResolver().query(PlayerEntry.CONTENT_URI, projection, selection, selectionArgs, PlayerEntry._ID)) {
             if (teamValue == PlayerEntry.TEAM_A) {
 
                 while (cursor != null && cursor.moveToNext()) {
@@ -251,7 +250,7 @@ public class TaskFragment extends Fragment {
     private void updatePointsOfCurrentPlayer() {
         ContentValues values = new ContentValues();
         values.put(PlayerEntry.COLUMN_PLAYER_POINTS, getPointsOfCurrentPlayer());
-        GameActivity.getGameContext().getContentResolver().update(ContentUris.withAppendedId(PlayerEntry.CONTENT_URI, currentPlayer.getPlayerId()), values, null, null);
+        getActivity().getContentResolver().update(ContentUris.withAppendedId(PlayerEntry.CONTENT_URI, currentPlayer.getPlayerId()), values, null, null);
     }
 
     private int getPointsOfCurrentPlayer() {
@@ -280,8 +279,8 @@ public class TaskFragment extends Fragment {
 
     public void setTaskImage() {
         currentTask = (int) (Math.random() * 10 + 1);
-        ImageView imgView = (ImageView) getView().findViewById(R.id.taskImageView);
-        TextView taskText = (TextView) getView().findViewById(R.id.taskTextView);
+        ImageView imgView = (ImageView) rootView.findViewById(R.id.taskImageView);
+        TextView taskText = (TextView) rootView.findViewById(R.id.taskTextView);
         switch (currentTask) {
             case 1 : {
                 imgView.setImageResource(R.drawable.blind);

@@ -1,15 +1,13 @@
 package com.example.michael.archerygame;
 
-import android.content.Context;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 public class GameActivity extends AppCompatActivity {
 
     public static long gameId;
-    public static Context gameContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +22,5 @@ public class GameActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         gameId = getIntent().getLongExtra("GAME_ID", -1);
-        gameContext = getApplicationContext();
-    }
-
-    public static Context getGameContext() {
-        return gameContext;
     }
 }
