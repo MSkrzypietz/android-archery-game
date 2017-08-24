@@ -1,10 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="?attr/actionBarSize"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
     android:padding="8dp">
 
     <LinearLayout
@@ -22,7 +20,7 @@
                 android:id="@+id/teamANameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Team A"
+                android:text="@string/team_a"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textColor="@android:color/black"
@@ -52,7 +50,7 @@
                 android:id="@+id/teamBNameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Team B"
+                android:text="@string/team_a"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textColor="@android:color/black"
@@ -69,4 +67,14 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:scaleType="center"
+        android:src="@drawable/ic_add"
+        android:layout_margin="@dimen/fab_margin" />
+
+</RelativeLayout>
