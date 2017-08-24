@@ -12,6 +12,10 @@ public class Player {
         this.score = score;
     }
 
+    public long getPlayerId() {
+        return playerId;
+    }
+
     public String getName() {
         if (name != null) return name;
         return "name not set.";

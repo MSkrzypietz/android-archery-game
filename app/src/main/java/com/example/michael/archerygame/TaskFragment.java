@@ -30,6 +30,7 @@ public class TaskFragment extends Fragment {
     private int playerTurnCounterOfTeamA = 0;
     private int playerTurnCounterOfTeamB = 0;
     private int currentTask;
+    private Player currentPlayer;
     private View rootView;
     private boolean isTeamATurn = true;
 
@@ -51,6 +52,8 @@ public class TaskFragment extends Fragment {
         final Button decPointsForTeamA = (Button) rootView.findViewById(R.id.decPointsForTeamA);
         final Button decPointsForTeamB = (Button) rootView.findViewById(R.id.decPointsForTeamB);
 
+        addPointsForTeamA.setEnabled(false);
+        addPointsForTeamB.setEnabled(false);
         decPointsForTeamA.setEnabled(false);
         decPointsForTeamB.setEnabled(false);
 
@@ -95,18 +98,32 @@ public class TaskFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setTaskImage();
-                addPointsForTeamA.setEnabled(true);
-                addPointsForTeamB.setEnabled(true);
+                if (isTeamATurn) {
+                    addPointsForTeamA.setEnabled(true);
+                    addPointsForTeamB.setEnabled(false);
+                }
+                else {
+                    addPointsForTeamA.setEnabled(false);
+                    addPointsForTeamB.setEnabled(true);
+                }
                 decPointsForTeamA.setEnabled(false);
                 decPointsForTeamB.setEnabled(false);
-                if (isTeamATurn) Toast.makeText(GameActivity.getGameContext(), getNextPlayerTeamA(), Toast.LENGTH_SHORT).show();
-                else Toast.makeText(GameActivity.getGameContext(), getNextPlayerTeamB(), Toast.LENGTH_SHORT).show();
+                if (isTeamATurn) {
+                    currentPlayer = getNextPlayerTeamA();
+                    Toast.makeText(GameActivity.getGameContext(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    currentPlayer = getNextPlayerTeamB();
+                    Toast.makeText(GameActivity.getGameContext(), currentPlayer.getName(), Toast.LENGTH_SHORT).show();
+                }
                 isTeamATurn = !isTeamATurn;
             }
         });
 
         initListTeam(PlayerEntry.TEAM_A);
         initListTeam(PlayerEntry.TEAM_B);
+        updateScoreOfTeamAView();
+        updateScoreOfTeamBView();
 
         return rootView;
     }
@@ -170,36 +187,76 @@ public class TaskFragment extends Fragment {
     }
 
     private void addPointsForTeamA() {
-        TextView teamAScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamA);
-        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) + getCurrentPointsOfTask();
-        teamAScoreView.setText(String.valueOf(newScore));
+        int newScore = currentPlayer.getScore() + getPointsOfCurrentTask();
+        currentPlayer.setScore(newScore);
+        updateScoreOfTeamAView();
+        updatePointsOfCurrentPlayer();
     }
 
     private void decPointsForTeamA() {
-        TextView teamAScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamA);
-        int newScore = Integer.parseInt(teamAScoreView.getText().toString()) - getCurrentPointsOfTask();
-        if (Integer.parseInt(teamAScoreView.getText().toString()) >= getCurrentPointsOfTask()) teamAScoreView.setText(String.valueOf(newScore));
+        int newScore = currentPlayer.getScore() - getPointsOfCurrentTask();
+        if (newScore < 0) return;
+
+        currentPlayer.setScore(newScore);
+        updateScoreOfTeamAView();
+        updatePointsOfCurrentPlayer();
     }
 
     private void addPointsForTeamB() {
-        TextView teamBScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamB);
-        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) + getCurrentPointsOfTask();
-        teamBScoreView.setText(String.valueOf(newScore));
+        int newScore = currentPlayer.getScore() + getPointsOfCurrentTask();
+        currentPlayer.setScore(newScore);
+        updateScoreOfTeamBView();
+        updatePointsOfCurrentPlayer();
     }
 
     private void decPointsForTeamB() {
-        TextView teamBScoreView = (TextView) getView().findViewById(R.id.scoreOfTeamB);
-        int newScore = Integer.parseInt(teamBScoreView.getText().toString()) - getCurrentPointsOfTask();
-        if (Integer.parseInt(teamBScoreView.getText().toString()) >= getCurrentPointsOfTask()) teamBScoreView.setText(String.valueOf(newScore));
+        int newScore = currentPlayer.getScore() - getPointsOfCurrentTask();
+        if (newScore < 0) return;
+
+        currentPlayer.setScore(newScore);
+        updateScoreOfTeamBView();
+        updatePointsOfCurrentPlayer();
     }
 
-    private void updatePointsForTeamA(int playerPoints) {
+    private void updateScoreOfTeamAView() {
+        int pointsOfTeamA = calcPointsOfTeamA();
+        TextView teamAScoreView = (TextView) rootView.findViewById(R.id.scoreOfTeamA);
+        teamAScoreView.setText(String.valueOf(pointsOfTeamA));
+    }
+
+    private int calcPointsOfTeamA() {
+        int pointsOfTeamA = 0;
+        for (Player player : playerListOfTeamA) {
+            pointsOfTeamA += player.getScore();
+        }
+        return pointsOfTeamA;
+    }
+
+    private void updateScoreOfTeamBView() {
+        int pointsOfTeamB = calcPointsOfTeamB();
+        TextView teamBScoreView = (TextView) rootView.findViewById(R.id.scoreOfTeamB);
+        teamBScoreView.setText(String.valueOf(pointsOfTeamB));
+    }
+
+    private int calcPointsOfTeamB() {
+        int pointsOfTeamB = 0;
+        for (Player player : playerListOfTeamB) {
+            pointsOfTeamB += player.getScore();
+        }
+        return pointsOfTeamB;
+    }
+
+    private void updatePointsOfCurrentPlayer() {
         ContentValues values = new ContentValues();
-        values.put(PlayerEntry.COLUMN_PLAYER_POINTS, playerPoints);
-        GameActivity.getGameContext().getContentResolver().update(ContentUris.withAppendedId(GameEntry.CONTENT_URI, gameId), values, null, null);
+        values.put(PlayerEntry.COLUMN_PLAYER_POINTS, getPointsOfCurrentPlayer());
+        GameActivity.getGameContext().getContentResolver().update(ContentUris.withAppendedId(PlayerEntry.CONTENT_URI, currentPlayer.getPlayerId()), values, null, null);
     }
 
-    private int getCurrentPointsOfTask() {
+    private int getPointsOfCurrentPlayer() {
+        return currentPlayer.getScore();
+    }
+
+    private int getPointsOfCurrentTask() {
         switch(currentTask) {
             case 1:
                 return 3;
@@ -252,13 +309,13 @@ public class TaskFragment extends Fragment {
         }
     }
 
-    public String getNextPlayerTeamA() {
+    public Player getNextPlayerTeamA() {
         if (++playerTurnCounterOfTeamA == playerListOfTeamA.size()) playerTurnCounterOfTeamA = 0;
-        return playerListOfTeamA.get(playerTurnCounterOfTeamA).getName();
+        return playerListOfTeamA.get(playerTurnCounterOfTeamA);
     }
 
-    public String getNextPlayerTeamB() {
+    public Player getNextPlayerTeamB() {
         if (++playerTurnCounterOfTeamB == playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
-        return playerListOfTeamB.get(playerTurnCounterOfTeamB).getName();
+        return playerListOfTeamB.get(playerTurnCounterOfTeamB);
     }
 }

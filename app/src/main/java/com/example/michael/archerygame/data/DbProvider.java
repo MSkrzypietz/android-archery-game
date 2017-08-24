@@ -8,15 +8,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
+
 import com.example.michael.archerygame.data.GameContract.GameEntry;
 import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
 
-/**
- * Created by Michael on 09.08.2017.
- */
-
 public class DbProvider extends ContentProvider {
-    /** Tag for the log messages */
+
     public static final String LOG_TAG = DbProvider.class.getSimpleName();
 
     private DbHelper mDbHelper;
@@ -28,12 +25,6 @@ public class DbProvider extends ContentProvider {
 
 
     static {
-        // The calls to addURI() go here, for all of the content URI patterns that the provider
-        // should recognize. All paths added to the UriMatcher have a corresponding code to return
-        // when a match is found.
-
-        // TODO: Add 2 content URIs to URI matcher
-
         sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         sUriMatcher.addURI(GameContract.CONTENT_AUTHORITY, GameContract.PATH_GAMES, GAMES);
         sUriMatcher.addURI(GameContract.CONTENT_AUTHORITY, GameContract.PATH_GAMES + "/#",
@@ -42,23 +33,18 @@ public class DbProvider extends ContentProvider {
         sUriMatcher.addURI(PlayerContract.CONTENT_AUTHORITY, PlayerContract.PATH_PLAYERS + "/#",
                 PLAYER_ID);
     }
-    /**
-     * Initialize the provider and the database helper object.
-     */
+
     @Override
     public boolean onCreate() {
         mDbHelper = new DbHelper(getContext());
         return true;
     }
 
-
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {
-        // Get readable database
-        SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
-        // This cursor will hold the result of the query
+        SQLiteDatabase database = mDbHelper.getReadableDatabase();
         Cursor cursor;
 
         int match = sUriMatcher.match(uri);
@@ -81,7 +67,6 @@ public class DbProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Cannot query unknown URI " + uri);
         }
-
         return cursor;
     }
 
@@ -142,20 +127,14 @@ public class DbProvider extends ContentProvider {
     }
 
     private int updateGame(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
         if (values.size() == 0) return 0;
-
         return database.update(GameEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
     private int updatePlayer(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
-
         if (values.size() == 0) return 0;
-
         return database.update(PlayerEntry.TABLE_NAME, values, selection, selectionArgs);
     }
 
