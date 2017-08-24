@@ -19,9 +19,6 @@ public class ScoreFragment extends Fragment {
     private View rootView;
     private long gameId;
 
-    public static ArrayAdapter<String> itemsAdapterTeamA;
-    public static ArrayAdapter<String> itemsAdapterTeamB;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -31,11 +28,11 @@ public class ScoreFragment extends Fragment {
         gameId = GameActivity.gameId;
         updateTeamNameViews();
 
-        itemsAdapterTeamA = new ArrayAdapter<>(GameActivity.getGameContext(), android.R.layout.simple_list_item_1, TaskFragment.playerListOfTeamA);
+        PlayerAdapter itemsAdapterTeamA = new PlayerAdapter(getActivity(), TaskFragment.playerListOfTeamA);
         ListView listViewTeamA = (ListView) rootView.findViewById(R.id.playerListOfTeamA);
         listViewTeamA.setAdapter(itemsAdapterTeamA);
 
-        itemsAdapterTeamB = new ArrayAdapter<>(GameActivity.getGameContext(), android.R.layout.simple_list_item_1, TaskFragment.playerListOfTeamB);
+        PlayerAdapter itemsAdapterTeamB = new PlayerAdapter(getActivity(), TaskFragment.playerListOfTeamB);
         ListView listViewTeamB = (ListView) rootView.findViewById(R.id.playerListOfTeamB);
         listViewTeamB.setAdapter(itemsAdapterTeamB);
 
