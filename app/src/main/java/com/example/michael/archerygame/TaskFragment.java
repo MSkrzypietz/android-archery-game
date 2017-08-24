@@ -34,6 +34,8 @@ public class TaskFragment extends Fragment {
     private View rootView;
     private boolean isTeamATurn = true;
 
+    //TODO: playerTurnCounter has to be saved in the db as well
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -317,5 +319,13 @@ public class TaskFragment extends Fragment {
     public Player getNextPlayerTeamB() {
         if (++playerTurnCounterOfTeamB == playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
         return playerListOfTeamB.get(playerTurnCounterOfTeamB);
+    }
+
+    public static ArrayList<Player> getPlayerListOfTeamA() {
+        return new ArrayList<>(playerListOfTeamA);
+    }
+
+    public static ArrayList<Player> getPlayerListOfTeamB() {
+        return new ArrayList<>(playerListOfTeamB);
     }
 }
