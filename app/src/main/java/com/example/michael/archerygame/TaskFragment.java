@@ -39,7 +39,7 @@ public class TaskFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_task, container, false);
 
-        initLists();
+        clearLists();
         gameId = GameActivity.gameId;
         if (gameId != -1) {
             initGameDetails();
@@ -127,7 +127,7 @@ public class TaskFragment extends Fragment {
         return rootView;
     }
 
-    private void initLists() {
+    private void clearLists() {
         playerListOfTeamB.clear();
         playerListOfTeamA.clear();
     }

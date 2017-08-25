@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.michael.archerygame.data.GameContract.GameEntry;
 import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
@@ -98,9 +97,9 @@ public class CreateGameActivity extends AppCompatActivity {
         if (teamValue == PlayerEntry.TEAM_A) playerList = membersOfTeamA;
         else playerList = membersOfTeamB;
 
-        for (String player : playerList) {
+        for (String playerName : playerList) {
             ContentValues values = new ContentValues();
-            values.put(PlayerEntry.COLUMN_PLAYER_NAME, player);
+            values.put(PlayerEntry.COLUMN_PLAYER_NAME, playerName);
             values.put(PlayerEntry.COLUMN_PLAYER_TEAM, teamValue);
             values.put(PlayerEntry.COLUMN_GAME_ID, gameId);
 

@@ -26,7 +26,7 @@ public class ScoreFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: insert dialog to add player
+                new InsertPlayerDialogFragment().show(getFragmentManager(), "dialog_insert_player");
             }
         });
 
