@@ -10,10 +10,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.michael.archerygame.data.GameContract;
 import com.example.michael.archerygame.data.PlayerContract;
 
 import static com.example.michael.archerygame.GameActivity.gameId;
@@ -33,10 +35,10 @@ public class InsertPlayerDialogFragment extends DialogFragment {
                     Toast.makeText(getContext(), "Bitt wähle ein Team aus", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                int selectedId = teamSelection.getCheckedRadioButtonId();
-                RadioButton selectedRadioButton = (RadioButton) view.findViewById(selectedId);
-                String teamName = selectedRadioButton.getText().toString();
-                Toast.makeText(getContext(), teamName, Toast.LENGTH_SHORT).show();
+                EditText playerNameView = (EditText) view.findViewById(R.id.playerNameDialogView);
+                String playerName = playerNameView.getText().toString();
+                int teamValue = ((RadioButton) view.findViewById(R.id.teamARadioButton)).isChecked() ? GameContract.GameEntry.TEAM_A : GameContract.GameEntry.TEAM_B;
+                createPlayerTableEntry(getActivity(), teamValue, playerName);
             }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -58,12 +60,37 @@ public class InsertPlayerDialogFragment extends DialogFragment {
         teamBRadioButton.setText(TaskFragment.nameOfTeamB);
     }
 
-    private void createPlayerTableEntries(Activity context, int teamValue) {
+    private void createPlayerTableEntry(Activity context, int teamValue, String playerName) {
         ContentValues values = new ContentValues();
-        //#values.put(PlayerContract.PlayerEntry.COLUMN_PLAYER_NAME, player);
+        values.put(PlayerContract.PlayerEntry.COLUMN_PLAYER_NAME, playerName);
         values.put(PlayerContract.PlayerEntry.COLUMN_PLAYER_TEAM, teamValue);
         values.put(PlayerContract.PlayerEntry.COLUMN_GAME_ID, gameId);
 
         long playerId = ContentUris.parseId(context.getContentResolver().insert(PlayerContract.PlayerEntry.CONTENT_URI, values));
+        insertPlayerIntoList(playerId, teamValue, playerName);
+        this.dismiss();
     }
+
+    private void insertPlayerIntoList(long playerId, int teamValue, String playerName) {
+        if (teamValue == GameContract.GameEntry.TEAM_A) {
+            TaskFragment.playerListOfTeamA.add(new Player(
+                    playerId, playerName, 0
+            ));
+            return;
+        }
+        TaskFragment.playerListOfTeamB.add(new Player(
+                playerId, playerName, 0
+        ));
+    }
+
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
+    }
+
+
 }

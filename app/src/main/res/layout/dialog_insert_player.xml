@@ -41,8 +41,7 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/playerNameView"
-        android:inputType="textPassword"
+        android:id="@+id/playerNameDialogView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
