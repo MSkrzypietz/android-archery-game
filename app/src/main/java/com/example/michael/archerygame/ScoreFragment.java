@@ -27,14 +27,14 @@ public class ScoreFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new InsertPlayerDialogFragment().show(getFragmentManager(), "dialog_insert_player#");
+                new InsertPlayerDialogFragment().show(getFragmentManager(), "dialog_insert_player");
             }
         });
 
         context = getActivity();
 
         updateTeamNameViews();
-        updateItemAdapters();
+        updateItemAdapters(context);
 
         return rootView;
     }
@@ -43,7 +43,7 @@ public class ScoreFragment extends Fragment {
     public void setUserVisibleHint(boolean visible){
         super.setUserVisibleHint(visible);
         if (visible){
-            updateItemAdapters();
+            updateItemAdapters(context);
         }
     }
 
@@ -55,7 +55,7 @@ public class ScoreFragment extends Fragment {
         teamNameBView.setText(TaskFragment.nameOfTeamB);
     }
 
-    public void updateItemAdapters() {
+    public void updateItemAdapters(Activity context) {
         Comparator<Player> scoreComparator = new Comparator<Player>() {
             @Override
             public int compare(Player player, Player t1) {
@@ -73,7 +73,7 @@ public class ScoreFragment extends Fragment {
         listViewTeamA.setAdapter(itemsAdapterTeamA);
     }
 
-    private void updateItemsAdapterOfTeamB(Activity context, Comparator<Player> scoreComparator) {
+    private  void updateItemsAdapterOfTeamB(Activity context, Comparator<Player> scoreComparator) {
         PlayerAdapter itemsAdapterTeamB = new PlayerAdapter(context, TaskFragment.getPlayerListOfTeamB());
         itemsAdapterTeamB.sort(scoreComparator);
         ListView listViewTeamB = (ListView) rootView.findViewById(R.id.playerListOfTeamB);

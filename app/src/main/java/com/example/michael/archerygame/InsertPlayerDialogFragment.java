@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -22,8 +23,22 @@ import static com.example.michael.archerygame.GameActivity.gameId;
 
 public class InsertPlayerDialogFragment extends DialogFragment {
 
+    private InsertPlayerDialogListener mCallback;
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            mCallback = (InsertPlayerDialogListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " must implement InsertPlayerDialogListener.");
+        }
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.dialog_insert_player, null);
@@ -39,6 +54,9 @@ public class InsertPlayerDialogFragment extends DialogFragment {
                 String playerName = playerNameView.getText().toString();
                 int teamValue = ((RadioButton) view.findViewById(R.id.teamARadioButton)).isChecked() ? GameContract.GameEntry.TEAM_A : GameContract.GameEntry.TEAM_B;
                 createPlayerTableEntry(getActivity(), teamValue, playerName);
+
+                //mCallback.updateAdapters();
+                dismiss();
             }
         })
         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -68,7 +86,6 @@ public class InsertPlayerDialogFragment extends DialogFragment {
 
         long playerId = ContentUris.parseId(context.getContentResolver().insert(PlayerContract.PlayerEntry.CONTENT_URI, values));
         insertPlayerIntoList(playerId, teamValue, playerName);
-        this.dismiss();
     }
 
     private void insertPlayerIntoList(long playerId, int teamValue, String playerName) {
@@ -83,14 +100,7 @@ public class InsertPlayerDialogFragment extends DialogFragment {
         ));
     }
 
-    @Override
-    public void onDismiss(final DialogInterface dialog) {
-        super.onDismiss(dialog);
-        final Activity activity = getActivity();
-        if (activity instanceof DialogInterface.OnDismissListener) {
-            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
-        }
+    public interface InsertPlayerDialogListener {
+        void updateAdapters();
     }
-
-
 }

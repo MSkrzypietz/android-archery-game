@@ -5,9 +5,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements InsertPlayerDialogFragment.InsertPlayerDialogListener {
 
     public static long gameId;
+    private SimpleFragmentPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +16,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        SimpleFragmentPagerAdapter adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager());
+        adapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -23,4 +24,10 @@ public class GameActivity extends AppCompatActivity {
 
         gameId = getIntent().getLongExtra("GAME_ID", -1);
     }
+
+    @Override
+    public void updateAdapters() {
+        //ScoreFragment.updateItemAdapters(adapter.getItem(1).getView());
+    }
+
 }
