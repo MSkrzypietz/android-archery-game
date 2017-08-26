@@ -25,29 +25,6 @@ import static com.example.michael.archerygame.GameActivity.gameId;
 
 public class InsertPlayerDialogFragment extends DialogFragment {
 
-    private InsertPlayerDialogListener mCallback;
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        try {
-            mCallback = (InsertPlayerDialogListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString() + " must implement InsertPlayerDialogListener.");
-        }
-    }
-
-    static InsertPlayerDialogFragment newInstance(int num) {
-        InsertPlayerDialogFragment fragment = new InsertPlayerDialogFragment();
-
-        Bundle args = new Bundle();
-        args.putInt("num", num);
-        fragment.setArguments(args);
-
-        return fragment;
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -113,18 +90,5 @@ public class InsertPlayerDialogFragment extends DialogFragment {
         TaskFragment.playerListOfTeamB.add(new Player(
                 playerId, playerName, 0
         ));
-    }
-
-    public  interface InsertPlayerDialogListener {
-        void updateAdapters();
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        Fragment parentFragment = getParentFragment();
-        if (parentFragment instanceof DialogInterface.OnDismissListener) {
-            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
-        }
     }
 }
