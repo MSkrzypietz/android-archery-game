@@ -1,6 +1,7 @@
 package com.example.michael.archerygame;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Comparator;
 
@@ -27,14 +29,16 @@ public class ScoreFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new InsertPlayerDialogFragment().show(getFragmentManager(), "dialog_insert_player");
+                InsertPlayerDialogFragment dialog = new InsertPlayerDialogFragment();
+                dialog.setTargetFragment(ScoreFragment.this, 1);
+                dialog.show(getFragmentManager(), "dialog_insert_player");
             }
         });
 
         context = getActivity();
 
         updateTeamNameViews();
-        updateItemAdapters(context);
+        updateItemAdapters();
 
         return rootView;
     }
@@ -43,7 +47,7 @@ public class ScoreFragment extends Fragment {
     public void setUserVisibleHint(boolean visible){
         super.setUserVisibleHint(visible);
         if (visible){
-            updateItemAdapters(context);
+            updateItemAdapters();
         }
     }
 
@@ -55,7 +59,7 @@ public class ScoreFragment extends Fragment {
         teamNameBView.setText(TaskFragment.nameOfTeamB);
     }
 
-    public void updateItemAdapters(Activity context) {
+    public void updateItemAdapters() {
         Comparator<Player> scoreComparator = new Comparator<Player>() {
             @Override
             public int compare(Player player, Player t1) {

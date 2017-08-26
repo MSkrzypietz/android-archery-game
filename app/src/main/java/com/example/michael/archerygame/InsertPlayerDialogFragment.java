@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,16 @@ public class InsertPlayerDialogFragment extends DialogFragment {
         }
     }
 
+    static InsertPlayerDialogFragment newInstance(int num) {
+        InsertPlayerDialogFragment fragment = new InsertPlayerDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putInt("num", num);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -55,7 +67,10 @@ public class InsertPlayerDialogFragment extends DialogFragment {
                 int teamValue = ((RadioButton) view.findViewById(R.id.teamARadioButton)).isChecked() ? GameContract.GameEntry.TEAM_A : GameContract.GameEntry.TEAM_B;
                 createPlayerTableEntry(getActivity(), teamValue, playerName);
 
-                //mCallback.updateAdapters();
+                Fragment targetFragment = getTargetFragment();
+                if (targetFragment != null) {
+                    ((ScoreFragment) targetFragment).updateItemAdapters();
+                }
                 dismiss();
             }
         })
@@ -100,7 +115,16 @@ public class InsertPlayerDialogFragment extends DialogFragment {
         ));
     }
 
-    public interface InsertPlayerDialogListener {
+    public  interface InsertPlayerDialogListener {
         void updateAdapters();
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Fragment parentFragment = getParentFragment();
+        if (parentFragment instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) parentFragment).onDismiss(dialog);
+        }
     }
 }
