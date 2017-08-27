@@ -146,10 +146,10 @@ public class DbProvider extends ContentProvider {
         switch (match) {
             case GAMES:
                 return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
-            /*case GAME_ID:
+            case GAME_ID:
                 selection = GameEntry._ID + " = ?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);*/
+                return database.delete(GameEntry.TABLE_NAME, selection, selectionArgs);
             default:
                 throw new IllegalArgumentException("Deletion is not supported for " + uri);
         }
