@@ -5,9 +5,13 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +79,7 @@ public class ScoreFragment extends Fragment {
         itemsAdapterTeamA.sort(scoreComparator);
         ListView listViewTeamA = (ListView) rootView.findViewById(R.id.playerListOfTeamA);
         listViewTeamA.setAdapter(itemsAdapterTeamA);
+        registerForContextMenu(listViewTeamA);
     }
 
     private  void updateItemsAdapterOfTeamB(Activity context, Comparator<Player> scoreComparator) {
@@ -82,6 +87,19 @@ public class ScoreFragment extends Fragment {
         itemsAdapterTeamB.sort(scoreComparator);
         ListView listViewTeamB = (ListView) rootView.findViewById(R.id.playerListOfTeamB);
         listViewTeamB.setAdapter(itemsAdapterTeamB);
+        registerForContextMenu(listViewTeamB);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenu.ContextMenuInfo menuInfo) {
+        menu.add("Entfernen");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
+
+        return true;
+    }
 }

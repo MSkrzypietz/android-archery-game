@@ -65,6 +65,7 @@ public class TaskFragment extends Fragment {
             }
         });
 
+
         decPointsForTeamA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
