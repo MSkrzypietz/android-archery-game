@@ -1,6 +1,8 @@
 package com.example.michael.archerygame;
 
 import android.app.Activity;
+import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,9 +18,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.michael.archerygame.data.PlayerContract;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 
 public class ScoreFragment extends Fragment {
+
+    private ArrayList<Player> playerListOfTeamA;
+    private ArrayList<Player> playerListOfTeamB;
 
     private View rootView;
     private Activity context;
@@ -75,7 +83,8 @@ public class ScoreFragment extends Fragment {
     }
 
     private void updateItemsAdapterOfTeamA(Activity context, Comparator<Player> scoreComparator) {
-        PlayerAdapter itemsAdapterTeamA = new PlayerAdapter(context, TaskFragment.getPlayerListOfTeamA());
+        playerListOfTeamA = TaskFragment.getPlayerListOfTeamA();
+        PlayerAdapter itemsAdapterTeamA = new PlayerAdapter(context, playerListOfTeamA);
         itemsAdapterTeamA.sort(scoreComparator);
         ListView listViewTeamA = (ListView) rootView.findViewById(R.id.playerListOfTeamA);
         listViewTeamA.setAdapter(itemsAdapterTeamA);
@@ -83,7 +92,8 @@ public class ScoreFragment extends Fragment {
     }
 
     private  void updateItemsAdapterOfTeamB(Activity context, Comparator<Player> scoreComparator) {
-        PlayerAdapter itemsAdapterTeamB = new PlayerAdapter(context, TaskFragment.getPlayerListOfTeamB());
+        playerListOfTeamB = TaskFragment.playerListOfTeamB;
+        PlayerAdapter itemsAdapterTeamB = new PlayerAdapter(context, playerListOfTeamB);
         itemsAdapterTeamB.sort(scoreComparator);
         ListView listViewTeamB = (ListView) rootView.findViewById(R.id.playerListOfTeamB);
         listViewTeamB.setAdapter(itemsAdapterTeamB);
@@ -99,7 +109,26 @@ public class ScoreFragment extends Fragment {
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-
+        item.setEnabled(false);
+        Player player;
+        if (info.id == R.id.playerListOfTeamA) {
+            Toast.makeText(getActivity(), "inContext Team A", Toast.LENGTH_SHORT).show();
+            player = playerListOfTeamA.get(info.position);
+        } else if (info.id == R.id.playerListOfTeamB) {
+            player = playerListOfTeamB.get(info.position);
+        } else {
+            return true;
+        }
+        player.setIsPlaying(false);
+        updateIsPlayingPlayer(player);
         return true;
+    }
+
+    private void updateIsPlayingPlayer(Player player) {
+        ContentValues values = new ContentValues();
+        Toast.makeText(getActivity(), "" +player.getIsPlaying(), Toast.LENGTH_SHORT).show();
+        values.put(PlayerContract.PlayerEntry.COLUMN_PLAYER_IS_PLAYING,
+                player.getIsPlaying() ? PlayerContract.PlayerEntry.IS_PLAYING : PlayerContract.PlayerEntry.NOT_PLAYING);
+        getActivity().getContentResolver().update(ContentUris.withAppendedId(PlayerContract.PlayerEntry.CONTENT_URI, player.getPlayerId()), values, null, null);
     }
 }

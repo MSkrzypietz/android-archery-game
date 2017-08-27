@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class PlayerAdapter extends ArrayAdapter<Player> {
+
     public PlayerAdapter(Activity context, ArrayList<Player> playerList) {
         super(context, 0, playerList);
     }
@@ -29,11 +31,14 @@ public class PlayerAdapter extends ArrayAdapter<Player> {
         Player currentPlayer = getItem(position);
 
         TextView playerNameView = (TextView) listItemView.findViewById(R.id.list_item_player_name);
-        playerNameView.setText(currentPlayer.getName());
+        if (currentPlayer.getName() != null) playerNameView.setText(currentPlayer.getName());
 
         TextView playerScoreView = (TextView) listItemView.findViewById(R.id.list_item_player_score);
         playerScoreView.setText(String.valueOf(currentPlayer.getScore()));
 
+        if (!currentPlayer.getIsPlaying()) listItemView.setEnabled(false);
+
         return listItemView;
     }
+
 }

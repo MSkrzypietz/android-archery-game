@@ -83,12 +83,12 @@ public class InsertPlayerDialogFragment extends DialogFragment {
     private void insertPlayerIntoList(long playerId, int teamValue, String playerName) {
         if (teamValue == GameContract.GameEntry.TEAM_A) {
             TaskFragment.playerListOfTeamA.add(new Player(
-                    playerId, playerName, 0
+                    playerId, playerName, 0, true
             ));
             return;
         }
         TaskFragment.playerListOfTeamB.add(new Player(
-                playerId, playerName, 0
+                playerId, playerName, 0, true
         ));
     }
 }

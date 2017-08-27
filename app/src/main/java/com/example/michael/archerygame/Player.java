@@ -5,11 +5,13 @@ public class Player {
     private long playerId;
     private String name = "";
     private int score = 0;
+    private boolean isPlaying = true;
 
-    public Player(long playerId, String name, int score) {
+    public Player(long playerId, String name, int score, boolean isPlaying) {
         this.playerId = playerId;
         if (name != null) this.name = name;
         this.score = score;
+        this.isPlaying = isPlaying;
     }
 
     public long getPlayerId() {
@@ -31,6 +33,14 @@ public class Player {
 
     public void setScore(int score) {
         if (score >= 0) this.score = score;
+    }
+
+    public boolean getIsPlaying() {
+        return isPlaying;
+    }
+
+    public void setIsPlaying(boolean isPlaying) {
+        this.isPlaying = isPlaying;
     }
 
 }

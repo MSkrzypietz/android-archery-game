@@ -3,13 +3,15 @@ package com.example.michael.archerygame.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.michael.archerygame.Player;
 import com.example.michael.archerygame.data.PlayerContract.PlayerEntry;
 import com.example.michael.archerygame.data.GameContract.GameEntry;
 
 class DbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "game.db";
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 6;
 
     DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -22,6 +24,7 @@ class DbHelper extends SQLiteOpenHelper {
                 + PlayerEntry.COLUMN_GAME_ID + " INTEGER NOT NULL, "
                 + PlayerEntry.COLUMN_PLAYER_NAME + " TEXT NOT NULL, "
                 + PlayerEntry.COLUMN_PLAYER_TEAM + " INTEGER NOT NULL, "
+                + PlayerEntry.COLUMN_PLAYER_IS_PLAYING + " INTEGER NOT NULL DEFAULT 0, "
                 + PlayerEntry.COLUMN_PLAYER_POINTS + " INTEGER NOT NULL DEFAULT 0);";
 
         db.execSQL(SQL_CREATE_PLAYERS_TABLE);

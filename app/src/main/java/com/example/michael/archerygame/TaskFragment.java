@@ -155,6 +155,7 @@ public class TaskFragment extends Fragment {
                 PlayerEntry._ID,
                 PlayerEntry.COLUMN_GAME_ID,
                 PlayerEntry.COLUMN_PLAYER_NAME,
+                PlayerEntry.COLUMN_PLAYER_IS_PLAYING,
                 PlayerEntry.COLUMN_PLAYER_POINTS
         };
 
@@ -165,18 +166,22 @@ public class TaskFragment extends Fragment {
             if (teamValue == PlayerEntry.TEAM_A) {
 
                 while (cursor != null && cursor.moveToNext()) {
+                    boolean isPlaying = cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_IS_PLAYING)) == PlayerEntry.IS_PLAYING;
                     playerListOfTeamA.add(new Player(
                             cursor.getLong(cursor.getColumnIndex(PlayerEntry._ID)),
                             cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
-                            cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS))));
+                            cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS)),
+                            isPlaying));
                 }
                 return;
             }
             while (cursor != null && cursor.moveToNext()) {
+                boolean isPlaying = cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_IS_PLAYING)) == PlayerEntry.IS_PLAYING;
                 playerListOfTeamB.add(new Player(
                         cursor.getLong(cursor.getColumnIndex(PlayerEntry._ID)),
                         cursor.getString(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_NAME)),
-                        cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS))));
+                        cursor.getInt(cursor.getColumnIndex(PlayerEntry.COLUMN_PLAYER_POINTS)),
+                        isPlaying));
             }
         }
     }
@@ -314,12 +319,16 @@ public class TaskFragment extends Fragment {
 
     public Player getNextPlayerTeamA() {
         if (++playerTurnCounterOfTeamA == playerListOfTeamA.size()) playerTurnCounterOfTeamA = 0;
-        return playerListOfTeamA.get(playerTurnCounterOfTeamA);
+        Player player = playerListOfTeamA.get(playerTurnCounterOfTeamA);
+        if (player.getIsPlaying()) return player;
+        return getNextPlayerTeamA();
     }
 
     public Player getNextPlayerTeamB() {
         if (++playerTurnCounterOfTeamB == playerListOfTeamB.size()) playerTurnCounterOfTeamB = 0;
-        return playerListOfTeamB.get(playerTurnCounterOfTeamB);
+        Player player = playerListOfTeamB.get(playerTurnCounterOfTeamB);
+        if (player.getIsPlaying()) return player;
+        return getNextPlayerTeamB();
     }
 
     public static ArrayList<Player> getPlayerListOfTeamA() {

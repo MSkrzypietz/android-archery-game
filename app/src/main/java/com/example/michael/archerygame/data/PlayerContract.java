@@ -26,9 +26,13 @@ public class PlayerContract {
         public final static String COLUMN_GAME_ID = "gameId";
         public final static String COLUMN_PLAYER_NAME = "playerName";
         public final static String COLUMN_PLAYER_TEAM = "playerTeam";
+        public final static String COLUMN_PLAYER_IS_PLAYING = "isPlaying";
         public final static String COLUMN_PLAYER_POINTS = "playerPoints";
 
         public static final int TEAM_A = 0;
         public static final int TEAM_B = 1;
+
+        public static final int IS_PLAYING = 0;
+        public static final int NOT_PLAYING = 1;
     }
 }
