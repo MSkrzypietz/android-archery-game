@@ -24,7 +24,7 @@
                 android:id="@+id/teamANameView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Team A"
+                android:text="@string/team_a"
                 android:textAlignment="center"
                 android:textSize="24sp"
                 android:textColor="@android:color/black"
