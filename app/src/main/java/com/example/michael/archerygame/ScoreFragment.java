@@ -3,20 +3,17 @@ package com.example.michael.archerygame;
 import android.app.Activity;
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.michael.archerygame.data.PlayerContract;
 
@@ -28,6 +25,7 @@ public class ScoreFragment extends Fragment {
     private ArrayList<Player> playerListOfTeamA;
     private ArrayList<Player> playerListOfTeamB;
 
+    private View viewOfContextMenu;
     private View rootView;
     private Activity context;
 
@@ -104,29 +102,22 @@ public class ScoreFragment extends Fragment {
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenu.ContextMenuInfo menuInfo) {
         menu.add("Entfernen");
+        viewOfContextMenu = v;
     }
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        item.setEnabled(false);
-        Player player;
-        if (info.id == R.id.playerListOfTeamA) {
-            Toast.makeText(getActivity(), "inContext Team A", Toast.LENGTH_SHORT).show();
-            player = playerListOfTeamA.get(info.position);
-        } else if (info.id == R.id.playerListOfTeamB) {
-            player = playerListOfTeamB.get(info.position);
-        } else {
-            return true;
-        }
+        Object obj = ((ListView) viewOfContextMenu).getAdapter().getItem(info.position);
+        Player player = (Player) obj;
         player.setIsPlaying(false);
         updateIsPlayingPlayer(player);
+        updateItemAdapters();
         return true;
     }
 
     private void updateIsPlayingPlayer(Player player) {
         ContentValues values = new ContentValues();
-        Toast.makeText(getActivity(), "" +player.getIsPlaying(), Toast.LENGTH_SHORT).show();
         values.put(PlayerContract.PlayerEntry.COLUMN_PLAYER_IS_PLAYING,
                 player.getIsPlaying() ? PlayerContract.PlayerEntry.IS_PLAYING : PlayerContract.PlayerEntry.NOT_PLAYING);
         getActivity().getContentResolver().update(ContentUris.withAppendedId(PlayerContract.PlayerEntry.CONTENT_URI, player.getPlayerId()), values, null, null);
